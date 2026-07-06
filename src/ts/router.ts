@@ -43,7 +43,7 @@ class Router {
   }
 
   static cleanPath(path: string) {
-    let clean = path.replace('/ci-cd', '');
+    const clean = path.replace('/ci-cd', '');
     return clean === '' ? '/' : clean;
   }
 
@@ -54,7 +54,7 @@ class Router {
   static goTo(pageId: string) {
     const basePath = Router.getBasePath();
     const fullPath = basePath + (pageId === '/' ? '' : pageId);
-    
+
     window.history.pushState({ pageId }, pageId, fullPath || '/');
     Router.render(pageId);
     window.scrollTo(0, 0);
@@ -67,9 +67,9 @@ class Router {
         link.addEventListener('click', (e) => {
           e.preventDefault();
           if (link instanceof HTMLAnchorElement) {
-            let path = Router.cleanPath(new URL(link.href).pathname);
-            let currentPath = Router.cleanPath(new URL(window.location.href).pathname);
-            
+            const path = Router.cleanPath(new URL(link.href).pathname);
+            const currentPath = Router.cleanPath(new URL(window.location.href).pathname);
+
             if (path !== currentPath) {
               Router.goTo(path);
             }
@@ -85,7 +85,7 @@ class Router {
       const path = Router.cleanPath(new URL(window.location.href).pathname);
       Router.render(path);
     });
-    
+
     const page = Router.cleanPath(new URL(window.location.href).pathname);
     Router.render(page);
   }
