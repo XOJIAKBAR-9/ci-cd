@@ -42,8 +42,20 @@ class Router {
     Router.changeLinks();
   }
 
+  static cleanPath(path: string) {
+    const clean = path.replace('/ci-cd', '');
+    return clean === '' ? '/' : clean;
+  }
+
+  static getBasePath() {
+    return window.location.hostname.includes('github.io') ? '/ci-cd' : '';
+  }
+
   static goTo(pageId: string) {
-    window.history.pushState({ pageId }, pageId, pageId);
+    const basePath = Router.getBasePath();
+    const fullPath = basePath + (pageId === '/' ? '' : pageId);
+
+    window.history.pushState({ pageId }, pageId, fullPath || '/');
     Router.render(pageId);
     window.scrollTo(0, 0);
   }
@@ -54,11 +66,13 @@ class Router {
       if (!link.classList.contains('link-changed')) {
         link.addEventListener('click', (e) => {
           e.preventDefault();
-          if (
-            link instanceof HTMLAnchorElement &&
-            (new URL(link.href).pathname !== '/catalog' || new URL(window.location.href).pathname !== '/catalog')
-          ) {
-            Router.goTo(new URL(link.href).pathname);
+          if (link instanceof HTMLAnchorElement) {
+            const path = Router.cleanPath(new URL(link.href).pathname);
+            const currentPath = Router.cleanPath(new URL(window.location.href).pathname);
+
+            if (path !== currentPath) {
+              Router.goTo(path);
+            }
           }
         });
         link.classList.add('link-changed');
@@ -68,9 +82,11 @@ class Router {
 
   static startRouter() {
     window.addEventListener('popstate', () => {
-      Router.render(new URL(window.location.href).pathname);
+      const path = Router.cleanPath(new URL(window.location.href).pathname);
+      Router.render(path);
     });
-    const page = new URL(window.location.href).pathname;
+
+    const page = Router.cleanPath(new URL(window.location.href).pathname);
     Router.render(page);
   }
 }
