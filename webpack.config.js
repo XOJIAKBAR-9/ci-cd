@@ -17,7 +17,7 @@ module.exports = {
   entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: process.env.NODE_ENV === 'production' ? '/ci-cd/' : '/', 
+    publicPath: process.env.CI ? '/ci-cd/' : '/', 
     clean: true,
     filename: '[name].[contenthash].js',
     assetModuleFilename: 'assets/[name][ext]',
