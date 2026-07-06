@@ -31,6 +31,13 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      filename: 'index.html',
+    }),
+
+    // --- ADD THIS SECOND ONE RIGHT HERE ---
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+      filename: '404.html',
     }),
 
     new MiniCssExtractPlugin({
@@ -46,9 +53,10 @@ module.exports = {
         { from: path.resolve(__dirname, '_redirects'), to: '' },
       ],
     }),
-
+    
     new CleanWebpackPlugin(),
   ],
+
   module: {
     rules: [
       {
